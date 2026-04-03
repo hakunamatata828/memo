@@ -3,24 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>碎片云 - 全局菜单版</title>
+    <title>碎片云 - 移动优化版</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3652/3652191.png">
     
     <style>
         :root {
+            /* 增大全局字号 */
+            --font-main: 16px;
+            --font-item: 18px;
             --bg: #ffffff; --text: #1d1d1f; --item-bg: #ffffff;
             --border: #f2f2f7; --tab-bg: #f2f2f7; --tab-text: #8e8e93;
-            --accent: #007aff; --input-bg: rgba(255, 255, 255, 0.95);
+            --accent: #007aff; --input-bg: rgba(255, 255, 255, 0.98);
             --shadow: 0 10px 40px rgba(0,0,0,0.1); --date-head: #8e8e93;
         }
-
         @media (prefers-color-scheme: dark) {
             :root {
                 --bg: #000000; --text: #f5f5f7; --item-bg: #1c1c1e;
                 --border: #2c2c2e; --tab-bg: #2c2c2e; --tab-text: #8e8e93;
-                --accent: #0a84ff; --input-bg: rgba(28, 28, 30, 0.95);
+                --accent: #0a84ff; --input-bg: rgba(28, 28, 30, 0.98);
                 --shadow: 0 10px 40px rgba(0,0,0,0.4); --date-head: #636366;
             }
         }
@@ -28,79 +30,71 @@
         body { 
             font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text);
             margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh;
+            min-height: 100vh; font-size: var(--font-main);
         }
         
-        .header-wrap { width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
-        .sync-info { font-size: 10px; color: var(--tab-text); text-align: center; opacity: 0.7; }
-        #syncKeyInput { border: none; background: none; color: var(--accent); border-bottom: 1px solid var(--border); width: 120px; font-size: 10px; text-align: center; outline: none; }
+        .header-wrap { width: 100%; max-width: 550px; display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
+        .sync-bar { display: flex; justify-content: center; align-items: center; gap: 12px; font-size: 13px; color: var(--tab-text); }
+        #syncKeyInput { border: none; background: none; color: var(--accent); border-bottom: 1px solid var(--border); width: 140px; text-align: center; outline: none; font-size: 13px; padding: 4px; }
+        .refresh-btn { font-size: 20px; cursor: pointer; }
 
-        .search-box { background: var(--tab-bg); border-radius: 12px; padding: 10px 15px; display: flex; align-items: center; gap: 10px; }
-        #searchInput { background: none; border: none; color: var(--text); width: 100%; outline: none; font-size: 14px; }
+        .search-box { background: var(--tab-bg); border-radius: 14px; padding: 12px 18px; display: flex; align-items: center; gap: 10px; }
+        #searchInput { background: none; border: none; color: var(--text); width: 100%; outline: none; font-size: 16px; }
 
-        .tabs { display: flex; gap: 10px; overflow-x: auto; width: 100%; padding-bottom: 12px; scrollbar-width: none; }
+        .tabs { display: flex; gap: 12px; overflow-x: auto; width: 100%; padding-bottom: 15px; scrollbar-width: none; }
         .tabs::-webkit-scrollbar { display: none; }
-        .tab { padding: 6px 16px; cursor: pointer; color: var(--tab-text); font-size: 13px; white-space: nowrap; border-radius: 20px; background: var(--tab-bg); }
+        .tab { padding: 8px 18px; cursor: pointer; color: var(--tab-text); font-size: 15px; white-space: nowrap; border-radius: 22px; background: var(--tab-bg); }
         .tab.active { color: #fff; background: var(--accent); font-weight: bold; }
 
-        #list { width: 100%; max-width: 500px; padding-bottom: 140px; min-height: 200px; }
-        .date-header { font-size: 12px; font-weight: bold; color: var(--date-head); margin: 25px 0 12px 5px; display: flex; align-items: center; gap: 12px; }
+        #list { width: 100%; max-width: 550px; padding-bottom: 180px; }
+        .date-header { font-size: 14px; font-weight: bold; color: var(--date-head); margin: 30px 0 15px 5px; display: flex; align-items: center; gap: 12px; }
         .date-header::after { content: ""; flex: 1; height: 1px; background: var(--border); }
 
-        .item { background: var(--item-bg); padding: 18px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
-        .item-text { font-size: 16px; line-height: 1.6; outline: none; margin-bottom: 12px; white-space: pre-wrap; word-break: break-all; }
-        .item-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid var(--border); }
-        .type-tag { font-size: 11px; color: var(--accent); font-weight: bold; cursor: pointer; background: var(--tab-bg); padding: 3px 10px; border-radius: 6px; }
-        .btn-del { font-size: 11px; color: var(--tab-text); cursor: pointer; }
+        .item { background: var(--item-bg); padding: 22px; margin-bottom: 15px; border: 1px solid var(--border); border-radius: 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .item-text { font-size: var(--font-item); line-height: 1.6; outline: none; margin-bottom: 15px; white-space: pre-wrap; word-break: break-all; }
+        .item-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--border); }
+        .type-tag { font-size: 13px; color: var(--accent); font-weight: bold; cursor: pointer; background: var(--tab-bg); padding: 4px 12px; border-radius: 8px; }
+        .btn-del { font-size: 13px; color: var(--tab-text); cursor: pointer; padding: 5px; }
 
-        /* 极简就近菜单 */
-        .tag-menu { 
-            position: fixed; background: var(--input-bg); backdrop-filter: blur(20px); 
-            border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow); 
-            z-index: 2000; padding: 6px; display: none; min-width: 140px; 
-            max-height: 250px; overflow-y: auto;
-        }
-        .menu-item { 
-            padding: 10px 14px; font-size: 14px; border-radius: 8px; 
-            cursor: pointer; transition: 0.1s; color: var(--text);
-        }
+        .tag-menu { position: fixed; background: var(--input-bg); backdrop-filter: blur(25px); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); z-index: 2000; padding: 8px; display: none; min-width: 160px; max-height: 300px; overflow-y: auto; }
+        .menu-item { padding: 12px 16px; font-size: 16px; border-radius: 10px; cursor: pointer; color: var(--text); }
         .menu-item:hover { background: var(--accent); color: white; }
-        .menu-item.add-new { border-top: 1px solid var(--border); margin-top: 6px; color: var(--accent); font-weight: bold; }
 
-        /* 输入框容器 */
+        /* 输入框容器优化：高度由 JS 动态控制 */
         .input-container { 
-            position: fixed; bottom: 30px; width: 92%; max-width: 500px; 
-            background: var(--input-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-radius: 28px; padding: 10px 10px 10px 20px; 
-            display: flex; align-items: center; border: 1px solid var(--border); 
-            box-shadow: var(--shadow); z-index: 100; 
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 100%; max-width: 550px; 
+            background: var(--input-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            padding: 12px 15px calc(12px + env(safe-area-inset-bottom)); 
+            display: flex; align-items: center; border-top: 1px solid var(--border); 
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05); z-index: 100; box-sizing: border-box;
         }
-        #textInput { flex: 1; border: none; background: none; color: var(--text); outline: none; font-size: 15px; height: 24px; resize: none; }
-        
-        /* 底部分类框：点击触发菜单 */
-        #typeInput { 
-            width: 70px; border: none; background: none; color: var(--accent); 
-            font-size: 13px; text-align: center; border-left: 1px solid var(--border); 
-            margin: 0 10px; outline: none; font-weight: bold; cursor: pointer;
-        }
-        
-        .btn-add { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: #fff; border: none; font-size: 26px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+        .input-wrap { flex: 1; display: flex; align-items: center; background: var(--tab-bg); border-radius: 25px; padding: 5px 5px 5px 18px; }
+        #textInput { flex: 1; border: none; background: none; color: var(--text); outline: none; font-size: 16px; max-height: 120px; min-height: 24px; padding: 8px 0; resize: none; }
+        #typeInput { width: 75px; border: none; background: none; color: var(--accent); font-size: 14px; text-align: center; border-left: 1px solid var(--border); margin: 0 10px; outline: none; font-weight: bold; cursor: pointer; overflow: hidden; text-overflow: ellipsis; }
+        .btn-add { width: 42px; height: 42px; border-radius: 50%; background: var(--accent); color: #fff; border: none; font-size: 28px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body onclick="hideMenu()">
 
     <div class="header-wrap">
-        <div class="sync-info">同步暗号: <input type="text" id="syncKeyInput" onchange="loadFromCloud()"><span id="syncStatus">●</span></div>
-        <div class="search-box">🔍 <input type="text" id="searchInput" placeholder="搜索内容或分类..." oninput="handleSearch()"></div>
+        <div class="sync-bar">
+            ID: <input type="text" id="syncKeyInput" spellcheck="false">
+            <span id="syncStatus">●</span>
+            <span class="refresh-btn" onclick="loadFromCloud()">🔄</span>
+        </div>
+        <div class="search-box">🔍 <input type="text" id="searchInput" placeholder="搜索..." oninput="handleSearch()"></div>
         <div class="tabs" id="tabs"></div>
     </div>
 
-    <div id="list">正在连接...</div>
+    <div id="list">连接云端中...</div>
 
-    <div class="input-container">
-        <textarea id="textInput" placeholder="记录碎片..." rows="1" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
-        <input type="text" id="typeInput" readonly value="默认" onclick="showMenu(event, 'BOTTOM_INPUT')">
-        <button class="btn-add" onclick="addItem()">+</button>
+    <div class="input-container" id="inputBar">
+        <div class="input-wrap">
+            <textarea id="textInput" placeholder="在此输入碎片..." rows="1" oninput="adjustInputHeight(this)"></textarea>
+            <input type="text" id="typeInput" readonly value="默认" onclick="showMenu(event, 'BOTTOM_INPUT')">
+        </div>
+        <button class="btn-add" onclick="addItem()" style="margin-left:10px;">+</button>
     </div>
 
     <div id="tagMenu" class="tag-menu" onclick="event.stopPropagation()"></div>
@@ -109,31 +103,64 @@
         let db = [];
         let currentFilter = '全部';
         let searchTerm = '';
-        let editingTarget = null; // 存储当前是修改哪条笔记，或者是底部输入框
+        let editingTarget = null;
+        let isLoaded = false;
 
+        const syncInput = document.getElementById('syncKeyInput');
+        const inputBar = document.getElementById('inputBar');
         let bucketId = localStorage.getItem('my_sync_key') || 'box_' + Math.random().toString(36).substr(2, 5);
-        document.getElementById('syncKeyInput').value = bucketId;
+        syncInput.value = bucketId;
+
+        // --- 核心：移动端键盘自适应逻辑 ---
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', () => {
+                const viewport = window.visualViewport;
+                // 当键盘弹出时，调整输入框位置
+                const offset = window.innerHeight - viewport.height;
+                if (offset > 0) {
+                    inputBar.style.bottom = offset + 'px';
+                    inputBar.style.paddingBottom = '12px'; // 键盘弹出时不需要 safe-area 补丁
+                } else {
+                    inputBar.style.bottom = '0px';
+                    inputBar.style.paddingBottom = 'calc(12px + env(safe-area-inset-bottom))';
+                }
+            });
+        }
+
+        function adjustInputHeight(el) {
+            el.style.height = 'auto';
+            el.style.height = (el.scrollHeight) + 'px';
+        }
+
+        // --- 数据同步逻辑 ---
+        async function loadFromCloud() {
+            bucketId = syncInput.value.trim();
+            if(!bucketId) return;
+            localStorage.setItem('my_sync_key', bucketId);
+            const statusEl = document.getElementById('syncStatus');
+            statusEl.style.color = 'orange';
+            try {
+                const res = await fetch(`https://kvdb.io/AnV9v7B7v6G4h6e7Wv1v6z/${bucketId}`);
+                const data = res.ok ? await res.json() : [];
+                db = Array.isArray(data) ? data : [];
+                isLoaded = true;
+            } catch (e) { console.error(e); }
+            render();
+            statusEl.style.color = '#34c759';
+        }
 
         async function sync() {
+            if (!isLoaded) return;
             document.getElementById('syncStatus').style.color = 'orange';
             try {
-                await fetch(`https://kvdb.io/AnV9v7B7v6G4h6e7Wv1v6z/${bucketId}`, { method: 'POST', body: JSON.stringify(db) });
+                await fetch(`https://kvdb.io/AnV9v7B7v6G4h6e7Wv1v6z/${bucketId}`, {
+                    method: 'POST', body: JSON.stringify(db)
+                });
                 document.getElementById('syncStatus').style.color = '#34c759';
             } catch (e) { document.getElementById('syncStatus').style.color = '#ff3b30'; }
         }
 
-        async function loadFromCloud() {
-            bucketId = document.getElementById('syncKeyInput').value.trim();
-            if(!bucketId) return;
-            localStorage.setItem('my_sync_key', bucketId);
-            document.getElementById('syncStatus').style.color = 'orange';
-            try {
-                const res = await fetch(`https://kvdb.io/AnV9v7B7v6G4h6e7Wv1v6z/${bucketId}`);
-                db = res.ok ? await res.json() : [];
-            } catch (e) { db = []; }
-            render();
-            document.getElementById('syncStatus').style.color = '#34c759';
-        }
+        syncInput.onkeydown = (e) => { if(e.key === 'Enter') loadFromCloud(); };
 
         function addItem() {
             const textEl = document.getElementById('textInput');
@@ -153,33 +180,20 @@
             render();
         }
 
-        // --- 核心改进：通用的就近弹出菜单 ---
         function showMenu(event, targetId) {
             event.stopPropagation();
             editingTarget = targetId;
             const menu = document.getElementById('tagMenu');
-            
-            // 获取所有已存在的标签，去掉重复
             const allTags = [...new Set(db.map(item => item.type))];
-            
             let html = allTags.map(t => `<div class="menu-item" onclick="applyTag('${t}')">${t}</div>`).join('');
-            html += `<div class="menu-item add-new" onclick="applyTag('NEW_PROMPT')">+ 新建分类</div>`;
-            
+            html += `<div class="menu-item" style="color:var(--accent); font-weight:bold;" onclick="applyTag('NEW_PROMPT')">+ 新建分类</div>`;
             menu.innerHTML = html;
             menu.style.display = 'block';
-
-            // 智能定位
             const rect = event.target.getBoundingClientRect();
-            
-            // 如果点击的是底部输入框，菜单向上弹出；否则向下弹出
-            if (targetId === 'BOTTOM_INPUT') {
-                menu.style.bottom = (window.innerHeight - rect.top + 10) + 'px';
-                menu.style.top = 'auto';
-            } else {
-                menu.style.top = (rect.bottom + 5) + 'px';
-                menu.style.bottom = 'auto';
-            }
-            menu.style.left = Math.min(rect.left, window.innerWidth - 160) + 'px';
+            // 键盘弹出时，菜单统一向上定位
+            menu.style.bottom = (window.innerHeight - rect.top + 10) + 'px';
+            menu.style.top = 'auto';
+            menu.style.left = Math.max(10, Math.min(rect.left, window.innerWidth - 180)) + 'px';
         }
 
         function hideMenu() { document.getElementById('tagMenu').style.display = 'none'; }
@@ -190,50 +204,36 @@
                 finalTag = prompt("输入新分类名称:");
                 if (!finalTag) return hideMenu();
             }
-            
-            if (editingTarget === 'BOTTOM_INPUT') {
-                // 如果是底部输入框，直接改值
-                document.getElementById('typeInput').value = finalTag;
-            } else {
-                // 如果是已有的笔记，修改数据库
-                const item = db.find(i => i.id === editingTarget);
-                if (item) { item.type = finalTag; render(); sync(); }
-            }
+            if (editingTarget === 'BOTTOM_INPUT') document.getElementById('typeInput').value = finalTag;
+            else { const item = db.find(i => i.id === editingTarget); if (item) { item.type = finalTag; render(); sync(); } }
             hideMenu();
         }
 
         function deleteItem(id) {
-            if (confirm("确定删除这条碎片？")) { db = db.filter(i => i.id !== id); render(); sync(); }
+            if (confirm("确定删除？")) { db = db.filter(i => i.id !== id); render(); sync(); }
         }
 
         function render() {
             const tabsEl = document.getElementById('tabs');
             const listEl = document.getElementById('list');
             const allTypes = ['全部', ...new Set(db.map(item => item.type))];
-            
-            tabsEl.innerHTML = allTypes.map(t => `
-                <div class="tab ${currentFilter === t ? 'active' : ''}" onclick="filterBy('${t}')">${t}</div>
-            `).join('');
-
+            tabsEl.innerHTML = allTypes.map(t => `<div class="tab ${currentFilter === t ? 'active' : ''}" onclick="filterBy('${t}')">${t}</div>`).join('');
             let data = currentFilter === '全部' ? db : db.filter(i => i.type === currentFilter);
             if (searchTerm) data = data.filter(i => i.content.toLowerCase().includes(searchTerm) || i.type.toLowerCase().includes(searchTerm));
-
             let html = ''; let lastDate = '';
             data.forEach(item => {
                 const d = new Date(item.id);
                 const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
                 if (dateStr !== lastDate) { html += `<div class="date-header">${dateStr}</div>`; lastDate = dateStr; }
-                html += `
-                    <div class="item">
-                        <div class="item-text" contenteditable="true" onblur="db.find(i=>i.id===${item.id}).content=this.innerText;sync();">${item.content}</div>
-                        <div class="item-footer">
-                            <span class="type-tag" onclick="showMenu(event, ${item.id})"># ${item.type}</span>
-                            <span class="btn-del" onclick="deleteItem(${item.id})">删除</span>
-                        </div>
+                html += `<div class="item">
+                    <div class="item-text" contenteditable="true" onblur="db.find(i=>i.id===${item.id}).content=this.innerText;sync();">${item.content}</div>
+                    <div class="item-footer">
+                        <span class="type-tag" onclick="showMenu(event, ${item.id})"># ${item.type}</span>
+                        <span class="btn-del" onclick="deleteItem(${item.id})">删除</span>
                     </div>
-                `;
+                </div>`;
             });
-            listEl.innerHTML = html || '<div style="text-align:center;padding-top:60px;color:#999;">暂无碎片</div>';
+            listEl.innerHTML = html || '<div style="text-align:center;padding-top:60px;color:#999;">无数据</div>';
         }
 
         loadFromCloud();
