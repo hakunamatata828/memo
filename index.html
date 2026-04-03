@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>碎片云 - 移动优化版</title>
+    <title>碎片云 - 最终稳定版</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3652/3652191.png">
     
     <style>
         :root {
-            /* 增大全局字号 */
-            --font-main: 16px;
-            --font-item: 18px;
             --bg: #ffffff; --text: #1d1d1f; --item-bg: #ffffff;
             --border: #f2f2f7; --tab-bg: #f2f2f7; --tab-text: #8e8e93;
             --accent: #007aff; --input-bg: rgba(255, 255, 255, 0.98);
@@ -30,13 +26,13 @@
         body { 
             font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text);
             margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; font-size: var(--font-main);
+            min-height: 100vh; font-size: 16px;
         }
         
         .header-wrap { width: 100%; max-width: 550px; display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
         .sync-bar { display: flex; justify-content: center; align-items: center; gap: 12px; font-size: 13px; color: var(--tab-text); }
         #syncKeyInput { border: none; background: none; color: var(--accent); border-bottom: 1px solid var(--border); width: 140px; text-align: center; outline: none; font-size: 13px; padding: 4px; }
-        .refresh-btn { font-size: 20px; cursor: pointer; }
+        .refresh-btn { font-size: 20px; cursor: pointer; user-select: none; }
 
         .search-box { background: var(--tab-bg); border-radius: 14px; padding: 12px 18px; display: flex; align-items: center; gap: 10px; }
         #searchInput { background: none; border: none; color: var(--text); width: 100%; outline: none; font-size: 16px; }
@@ -51,7 +47,7 @@
         .date-header::after { content: ""; flex: 1; height: 1px; background: var(--border); }
 
         .item { background: var(--item-bg); padding: 22px; margin-bottom: 15px; border: 1px solid var(--border); border-radius: 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
-        .item-text { font-size: var(--font-item); line-height: 1.6; outline: none; margin-bottom: 15px; white-space: pre-wrap; word-break: break-all; }
+        .item-text { font-size: 18px; line-height: 1.6; outline: none; margin-bottom: 15px; white-space: pre-wrap; word-break: break-all; }
         .item-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--border); }
         .type-tag { font-size: 13px; color: var(--accent); font-weight: bold; cursor: pointer; background: var(--tab-bg); padding: 4px 12px; border-radius: 8px; }
         .btn-del { font-size: 13px; color: var(--tab-text); cursor: pointer; padding: 5px; }
@@ -60,7 +56,6 @@
         .menu-item { padding: 12px 16px; font-size: 16px; border-radius: 10px; cursor: pointer; color: var(--text); }
         .menu-item:hover { background: var(--accent); color: white; }
 
-        /* 输入框容器优化：高度由 JS 动态控制 */
         .input-container { 
             position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
             width: 100%; max-width: 550px; 
@@ -72,29 +67,29 @@
         .input-wrap { flex: 1; display: flex; align-items: center; background: var(--tab-bg); border-radius: 25px; padding: 5px 5px 5px 18px; }
         #textInput { flex: 1; border: none; background: none; color: var(--text); outline: none; font-size: 16px; max-height: 120px; min-height: 24px; padding: 8px 0; resize: none; }
         #typeInput { width: 75px; border: none; background: none; color: var(--accent); font-size: 14px; text-align: center; border-left: 1px solid var(--border); margin: 0 10px; outline: none; font-weight: bold; cursor: pointer; overflow: hidden; text-overflow: ellipsis; }
-        .btn-add { width: 42px; height: 42px; border-radius: 50%; background: var(--accent); color: #fff; border: none; font-size: 28px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+        .btn-add { width: 42px; height: 42px; border-radius: 50%; background: var(--accent); color: #fff; border: none; font-size: 28px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-left:10px; }
     </style>
 </head>
 <body onclick="hideMenu()">
 
     <div class="header-wrap">
         <div class="sync-bar">
-            ID: <input type="text" id="syncKeyInput" spellcheck="false">
-            <span id="syncStatus">●</span>
+            暗号: <input type="text" id="syncKeyInput" spellcheck="false" placeholder="输入同步暗号">
+            <span id="syncStatus" style="font-size: 18px;">●</span>
             <span class="refresh-btn" onclick="loadFromCloud()">🔄</span>
         </div>
         <div class="search-box">🔍 <input type="text" id="searchInput" placeholder="搜索..." oninput="handleSearch()"></div>
         <div class="tabs" id="tabs"></div>
     </div>
 
-    <div id="list">连接云端中...</div>
+    <div id="list">数据加载中...</div>
 
     <div class="input-container" id="inputBar">
         <div class="input-wrap">
-            <textarea id="textInput" placeholder="在此输入碎片..." rows="1" oninput="adjustInputHeight(this)"></textarea>
+            <textarea id="textInput" placeholder="写点什么..." rows="1" oninput="adjustInputHeight(this)"></textarea>
             <input type="text" id="typeInput" readonly value="默认" onclick="showMenu(event, 'BOTTOM_INPUT')">
         </div>
-        <button class="btn-add" onclick="addItem()" style="margin-left:10px;">+</button>
+        <button class="btn-add" onclick="addItem()">+</button>
     </div>
 
     <div id="tagMenu" class="tag-menu" onclick="event.stopPropagation()"></div>
@@ -104,76 +99,87 @@
         let currentFilter = '全部';
         let searchTerm = '';
         let editingTarget = null;
-        let isLoaded = false;
+        let isCloudSynced = false; // 关键锁：只有加载过云端，才允许写入
 
         const syncInput = document.getElementById('syncKeyInput');
         const inputBar = document.getElementById('inputBar');
-        let bucketId = localStorage.getItem('my_sync_key') || 'box_' + Math.random().toString(36).substr(2, 5);
+        
+        // 生成或读取暗号
+        let bucketId = localStorage.getItem('my_sync_key') || 'user_' + Math.random().toString(36).substr(2, 8);
         syncInput.value = bucketId;
 
-        // --- 核心：移动端键盘自适应逻辑 ---
+        // 键盘自适应
         if (window.visualViewport) {
             window.visualViewport.addEventListener('resize', () => {
                 const viewport = window.visualViewport;
-                // 当键盘弹出时，调整输入框位置
                 const offset = window.innerHeight - viewport.height;
-                if (offset > 0) {
-                    inputBar.style.bottom = offset + 'px';
-                    inputBar.style.paddingBottom = '12px'; // 键盘弹出时不需要 safe-area 补丁
-                } else {
-                    inputBar.style.bottom = '0px';
-                    inputBar.style.paddingBottom = 'calc(12px + env(safe-area-inset-bottom))';
-                }
+                inputBar.style.bottom = offset > 0 ? offset + 'px' : '0px';
             });
         }
 
-        function adjustInputHeight(el) {
-            el.style.height = 'auto';
-            el.style.height = (el.scrollHeight) + 'px';
-        }
+        function adjustInputHeight(el) { el.style.height = 'auto'; el.style.height = (el.scrollHeight) + 'px'; }
 
-        // --- 数据同步逻辑 ---
+        // --- 核心同步逻辑 ---
         async function loadFromCloud() {
             bucketId = syncInput.value.trim();
-            if(!bucketId) return;
+            if(!bucketId) return alert("暗号不能为空");
             localStorage.setItem('my_sync_key', bucketId);
+            
             const statusEl = document.getElementById('syncStatus');
-            statusEl.style.color = 'orange';
+            statusEl.style.color = '#007aff'; // 蓝色：正在抓取数据
+
             try {
+                // 使用更可靠的 kvdb 公共节点
                 const res = await fetch(`https://kvdb.io/AnV9v7B7v6G4h6e7Wv1v6z/${bucketId}`);
-                const data = res.ok ? await res.json() : [];
-                db = Array.isArray(data) ? data : [];
-                isLoaded = true;
-            } catch (e) { console.error(e); }
+                if (res.ok) {
+                    const cloudData = await res.json();
+                    if (Array.isArray(cloudData)) {
+                        db = cloudData;
+                        isCloudSynced = true; // 确认拿到数据，开锁
+                    }
+                } else if (res.status === 404) {
+                    // 如果云端是空的，说明是新暗号，我们也开锁
+                    db = [];
+                    isCloudSynced = true;
+                }
+                statusEl.style.color = '#34c759'; // 绿色：同步成功
+            } catch (e) {
+                console.error("同步失败", e);
+                statusEl.style.color = '#ff3b30'; // 红色：网络错误
+                alert("云端连接失败，请检查网络或暗号");
+            }
             render();
-            statusEl.style.color = '#34c759';
         }
 
-        async function sync() {
-            if (!isLoaded) return;
-            document.getElementById('syncStatus').style.color = 'orange';
+        async function uploadToCloud() {
+            if (!isCloudSynced) return; // 没加载过云端，禁止上传，防止覆盖
+            
+            document.getElementById('syncStatus').style.color = '#007aff';
             try {
                 await fetch(`https://kvdb.io/AnV9v7B7v6G4h6e7Wv1v6z/${bucketId}`, {
-                    method: 'POST', body: JSON.stringify(db)
+                    method: 'POST',
+                    body: JSON.stringify(db)
                 });
                 document.getElementById('syncStatus').style.color = '#34c759';
-            } catch (e) { document.getElementById('syncStatus').style.color = '#ff3b30'; }
+            } catch (e) {
+                document.getElementById('syncStatus').style.color = '#ff3b30';
+            }
         }
 
-        syncInput.onkeydown = (e) => { if(e.key === 'Enter') loadFromCloud(); };
-
+        // --- 界面交互逻辑 ---
         function addItem() {
+            if (!isCloudSynced) return alert("请先点击刷新图标确认云端同步状态");
             const textEl = document.getElementById('textInput');
             const typeEl = document.getElementById('typeInput');
             if (!textEl.value.trim()) return;
+            
             db.unshift({ id: Date.now(), type: typeEl.value || '默认', content: textEl.value.trim() });
             textEl.value = ''; textEl.style.height = '24px';
-            if (currentFilter === '全部') typeEl.value = '默认';
-            render(); sync();
+            render();
+            uploadToCloud();
         }
 
         function handleSearch() { searchTerm = document.getElementById('searchInput').value.toLowerCase(); render(); }
-
         function filterBy(type) {
             currentFilter = type;
             document.getElementById('typeInput').value = (type === '全部') ? '默认' : type;
@@ -186,31 +192,25 @@
             const menu = document.getElementById('tagMenu');
             const allTags = [...new Set(db.map(item => item.type))];
             let html = allTags.map(t => `<div class="menu-item" onclick="applyTag('${t}')">${t}</div>`).join('');
-            html += `<div class="menu-item" style="color:var(--accent); font-weight:bold;" onclick="applyTag('NEW_PROMPT')">+ 新建分类</div>`;
+            html += `<div class="menu-item" style="color:var(--accent);font-weight:bold" onclick="applyTag('NEW_PROMPT')">+ 新建分类</div>`;
             menu.innerHTML = html;
             menu.style.display = 'block';
             const rect = event.target.getBoundingClientRect();
-            // 键盘弹出时，菜单统一向上定位
             menu.style.bottom = (window.innerHeight - rect.top + 10) + 'px';
-            menu.style.top = 'auto';
             menu.style.left = Math.max(10, Math.min(rect.left, window.innerWidth - 180)) + 'px';
         }
 
         function hideMenu() { document.getElementById('tagMenu').style.display = 'none'; }
-
         function applyTag(tag) {
-            let finalTag = tag;
-            if (tag === 'NEW_PROMPT') {
-                finalTag = prompt("输入新分类名称:");
-                if (!finalTag) return hideMenu();
-            }
+            let finalTag = tag === 'NEW_PROMPT' ? prompt("输入新名称:") : tag;
+            if (!finalTag) return hideMenu();
             if (editingTarget === 'BOTTOM_INPUT') document.getElementById('typeInput').value = finalTag;
-            else { const item = db.find(i => i.id === editingTarget); if (item) { item.type = finalTag; render(); sync(); } }
+            else { const item = db.find(i => i.id === editingTarget); if (item) { item.type = finalTag; render(); uploadToCloud(); } }
             hideMenu();
         }
 
         function deleteItem(id) {
-            if (confirm("确定删除？")) { db = db.filter(i => i.id !== id); render(); sync(); }
+            if (confirm("删除这条碎片？")) { db = db.filter(i => i.id !== id); render(); uploadToCloud(); }
         }
 
         function render() {
@@ -218,24 +218,24 @@
             const listEl = document.getElementById('list');
             const allTypes = ['全部', ...new Set(db.map(item => item.type))];
             tabsEl.innerHTML = allTypes.map(t => `<div class="tab ${currentFilter === t ? 'active' : ''}" onclick="filterBy('${t}')">${t}</div>`).join('');
+            
             let data = currentFilter === '全部' ? db : db.filter(i => i.type === currentFilter);
             if (searchTerm) data = data.filter(i => i.content.toLowerCase().includes(searchTerm) || i.type.toLowerCase().includes(searchTerm));
+            
             let html = ''; let lastDate = '';
             data.forEach(item => {
                 const d = new Date(item.id);
-                const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+                const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
                 if (dateStr !== lastDate) { html += `<div class="date-header">${dateStr}</div>`; lastDate = dateStr; }
                 html += `<div class="item">
-                    <div class="item-text" contenteditable="true" onblur="db.find(i=>i.id===${item.id}).content=this.innerText;sync();">${item.content}</div>
-                    <div class="item-footer">
-                        <span class="type-tag" onclick="showMenu(event, ${item.id})"># ${item.type}</span>
-                        <span class="btn-del" onclick="deleteItem(${item.id})">删除</span>
-                    </div>
+                    <div class="item-text" contenteditable="true" onblur="db.find(i=>i.id===${item.id}).content=this.innerText;uploadToCloud();">${item.content}</div>
+                    <div class="item-footer"><span class="type-tag" onclick="showMenu(event, ${item.id})"># ${item.type}</span><span class="btn-del" onclick="deleteItem(${item.id})">删除</span></div>
                 </div>`;
             });
-            listEl.innerHTML = html || '<div style="text-align:center;padding-top:60px;color:#999;">无数据</div>';
+            listEl.innerHTML = html || '<div style="text-align:center;padding-top:60px;color:#999;">输入暗号并点🔄拉取数据</div>';
         }
 
+        // 初始自动加载一次
         loadFromCloud();
     </script>
 </body>
