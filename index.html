@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>碎片云 - 最终稳定版</title>
+    <title>碎片云 - 双保险稳定版</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    
     <style>
         :root {
             --bg: #ffffff; --text: #1d1d1f; --item-bg: #ffffff;
@@ -22,71 +20,65 @@
                 --shadow: 0 10px 40px rgba(0,0,0,0.4); --date-head: #636366;
             }
         }
-
-        body { 
-            font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text);
-            margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; font-size: 16px;
-        }
-        
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; font-size: 16px; }
         .header-wrap { width: 100%; max-width: 550px; display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
-        .sync-bar { display: flex; justify-content: center; align-items: center; gap: 12px; font-size: 13px; color: var(--tab-text); }
-        #syncKeyInput { border: none; background: none; color: var(--accent); border-bottom: 1px solid var(--border); width: 140px; text-align: center; outline: none; font-size: 13px; padding: 4px; }
-        .refresh-btn { font-size: 20px; cursor: pointer; user-select: none; }
+        
+        /* 状态面板 */
+        .status-panel { background: var(--tab-bg); border-radius: 12px; padding: 12px; font-size: 12px; color: var(--tab-text); }
+        .sync-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px; }
+        #syncKeyInput { border: none; background: #fff; color: var(--accent); border-radius: 6px; width: 140px; text-align: center; outline: none; padding: 4px; font-weight: bold; }
+        .dot { font-size: 18px; line-height: 1; }
+        .btn-group { display: flex; justify-content: center; gap: 10px; }
+        .btn-s { padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); background: #fff; cursor: pointer; color: var(--text); font-size: 11px; }
 
         .search-box { background: var(--tab-bg); border-radius: 14px; padding: 12px 18px; display: flex; align-items: center; gap: 10px; }
         #searchInput { background: none; border: none; color: var(--text); width: 100%; outline: none; font-size: 16px; }
-
-        .tabs { display: flex; gap: 12px; overflow-x: auto; width: 100%; padding-bottom: 15px; scrollbar-width: none; }
-        .tabs::-webkit-scrollbar { display: none; }
-        .tab { padding: 8px 18px; cursor: pointer; color: var(--tab-text); font-size: 15px; white-space: nowrap; border-radius: 22px; background: var(--tab-bg); }
+        .tabs { display: flex; gap: 10px; overflow-x: auto; width: 100%; padding-bottom: 10px; scrollbar-width: none; }
+        .tab { padding: 8px 18px; cursor: pointer; color: var(--tab-text); font-size: 14px; white-space: nowrap; border-radius: 20px; background: var(--tab-bg); }
         .tab.active { color: #fff; background: var(--accent); font-weight: bold; }
-
+        
         #list { width: 100%; max-width: 550px; padding-bottom: 180px; }
         .date-header { font-size: 14px; font-weight: bold; color: var(--date-head); margin: 30px 0 15px 5px; display: flex; align-items: center; gap: 12px; }
         .date-header::after { content: ""; flex: 1; height: 1px; background: var(--border); }
-
-        .item { background: var(--item-bg); padding: 22px; margin-bottom: 15px; border: 1px solid var(--border); border-radius: 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
-        .item-text { font-size: 18px; line-height: 1.6; outline: none; margin-bottom: 15px; white-space: pre-wrap; word-break: break-all; }
-        .item-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--border); }
-        .type-tag { font-size: 13px; color: var(--accent); font-weight: bold; cursor: pointer; background: var(--tab-bg); padding: 4px 12px; border-radius: 8px; }
-        .btn-del { font-size: 13px; color: var(--tab-text); cursor: pointer; padding: 5px; }
-
-        .tag-menu { position: fixed; background: var(--input-bg); backdrop-filter: blur(25px); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); z-index: 2000; padding: 8px; display: none; min-width: 160px; max-height: 300px; overflow-y: auto; }
-        .menu-item { padding: 12px 16px; font-size: 16px; border-radius: 10px; cursor: pointer; color: var(--text); }
+        .item { background: var(--item-bg); padding: 20px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .item-text { font-size: 18px; line-height: 1.6; outline: none; margin-bottom: 12px; white-space: pre-wrap; word-break: break-all; }
+        .item-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid var(--border); }
+        .type-tag { font-size: 12px; color: var(--accent); font-weight: bold; cursor: pointer; }
+        .btn-del { font-size: 12px; color: var(--tab-text); cursor: pointer; }
+        
+        .tag-menu { position: fixed; background: var(--input-bg); backdrop-filter: blur(25px); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); z-index: 2000; padding: 8px; display: none; min-width: 160px; }
+        .menu-item { padding: 10px 15px; font-size: 15px; border-radius: 8px; cursor: pointer; color: var(--text); }
         .menu-item:hover { background: var(--accent); color: white; }
 
-        .input-container { 
-            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-            width: 100%; max-width: 550px; 
-            background: var(--input-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            padding: 12px 15px calc(12px + env(safe-area-inset-bottom)); 
-            display: flex; align-items: center; border-top: 1px solid var(--border); 
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.05); z-index: 100; box-sizing: border-box;
-        }
+        .input-container { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 550px; background: var(--input-bg); backdrop-filter: blur(25px); padding: 12px 15px calc(12px + env(safe-area-inset-bottom)); display: flex; align-items: center; border-top: 1px solid var(--border); z-index: 100; box-sizing: border-box; }
         .input-wrap { flex: 1; display: flex; align-items: center; background: var(--tab-bg); border-radius: 25px; padding: 5px 5px 5px 18px; }
         #textInput { flex: 1; border: none; background: none; color: var(--text); outline: none; font-size: 16px; max-height: 120px; min-height: 24px; padding: 8px 0; resize: none; }
-        #typeInput { width: 75px; border: none; background: none; color: var(--accent); font-size: 14px; text-align: center; border-left: 1px solid var(--border); margin: 0 10px; outline: none; font-weight: bold; cursor: pointer; overflow: hidden; text-overflow: ellipsis; }
-        .btn-add { width: 42px; height: 42px; border-radius: 50%; background: var(--accent); color: #fff; border: none; font-size: 28px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-left:10px; }
+        #typeInput { width: 70px; border: none; background: none; color: var(--accent); font-size: 13px; text-align: center; border-left: 1px solid var(--border); margin: 0 10px; outline: none; font-weight: bold; cursor: pointer; }
+        .btn-add { width: 42px; height: 42px; border-radius: 50%; background: var(--accent); color: #fff; border: none; font-size: 28px; cursor: pointer; margin-left: 10px; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body onclick="hideMenu()">
 
     <div class="header-wrap">
-        <div class="sync-bar">
-            暗号: <input type="text" id="syncKeyInput" spellcheck="false" placeholder="输入同步暗号">
-            <span id="syncStatus" style="font-size: 18px;">●</span>
-            <span class="refresh-btn" onclick="loadFromCloud()">🔄</span>
+        <div class="status-panel">
+            <div class="sync-row">
+                暗号: <input type="text" id="syncKeyInput" spellcheck="false">
+                <span id="syncStatus" class="dot">●</span>
+            </div>
+            <div class="btn-group">
+                <button class="btn-s" onclick="pullFromCloud()">🔄 强制拉取云端</button>
+                <button class="btn-s" onclick="pushToCloud()">☁️ 强制备份至云端</button>
+            </div>
         </div>
-        <div class="search-box">🔍 <input type="text" id="searchInput" placeholder="搜索..." oninput="handleSearch()"></div>
+        <div class="search-box">🔍 <input type="text" id="searchInput" placeholder="搜索内容..." oninput="handleSearch()"></div>
         <div class="tabs" id="tabs"></div>
     </div>
 
-    <div id="list">数据加载中...</div>
+    <div id="list">正在加载本地数据...</div>
 
-    <div class="input-container" id="inputBar">
+    <div class="input-container">
         <div class="input-wrap">
-            <textarea id="textInput" placeholder="写点什么..." rows="1" oninput="adjustInputHeight(this)"></textarea>
+            <textarea id="textInput" placeholder="在此输入..." rows="1" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
             <input type="text" id="typeInput" readonly value="默认" onclick="showMenu(event, 'BOTTOM_INPUT')">
         </div>
         <button class="btn-add" onclick="addItem()">+</button>
@@ -95,105 +87,101 @@
     <div id="tagMenu" class="tag-menu" onclick="event.stopPropagation()"></div>
 
     <script>
-        let db = [];
+        // --- 核心逻辑：本地优先 + 云端备份 ---
+        let db = JSON.parse(localStorage.getItem('local_fragments')) || [];
         let currentFilter = '全部';
         let searchTerm = '';
-        let editingTarget = null;
-        let isCloudSynced = false; // 关键锁：只有加载过云端，才允许写入
-
+        const API_PREFIX = "https://kvdb.io/AnV9v7B7v6G4h6e7Wv1v6z/";
         const syncInput = document.getElementById('syncKeyInput');
-        const inputBar = document.getElementById('inputBar');
+        let bucketId = localStorage.getItem('my_sync_key') || 'box_' + Math.random().toString(36).substr(2, 6);
         
-        // 生成或读取暗号
-        let bucketId = localStorage.getItem('my_sync_key') || 'user_' + Math.random().toString(36).substr(2, 8);
         syncInput.value = bucketId;
 
-        // 键盘自适应
-        if (window.visualViewport) {
-            window.visualViewport.addEventListener('resize', () => {
-                const viewport = window.visualViewport;
-                const offset = window.innerHeight - viewport.height;
-                inputBar.style.bottom = offset > 0 ? offset + 'px' : '0px';
-            });
-        }
-
-        function adjustInputHeight(el) { el.style.height = 'auto'; el.style.height = (el.scrollHeight) + 'px'; }
-
-        // --- 核心同步逻辑 ---
-        async function loadFromCloud() {
-            bucketId = syncInput.value.trim();
-            if(!bucketId) return alert("暗号不能为空");
+        // 1. 本地立即保存函数
+        function saveLocal() {
+            localStorage.setItem('local_fragments', JSON.stringify(db));
             localStorage.setItem('my_sync_key', bucketId);
-            
-            const statusEl = document.getElementById('syncStatus');
-            statusEl.style.color = '#007aff'; // 蓝色：正在抓取数据
-
-            try {
-                // 使用更可靠的 kvdb 公共节点
-                const res = await fetch(`https://kvdb.io/AnV9v7B7v6G4h6e7Wv1v6z/${bucketId}`);
-                if (res.ok) {
-                    const cloudData = await res.json();
-                    if (Array.isArray(cloudData)) {
-                        db = cloudData;
-                        isCloudSynced = true; // 确认拿到数据，开锁
-                    }
-                } else if (res.status === 404) {
-                    // 如果云端是空的，说明是新暗号，我们也开锁
-                    db = [];
-                    isCloudSynced = true;
-                }
-                statusEl.style.color = '#34c759'; // 绿色：同步成功
-            } catch (e) {
-                console.error("同步失败", e);
-                statusEl.style.color = '#ff3b30'; // 红色：网络错误
-                alert("云端连接失败，请检查网络或暗号");
-            }
             render();
         }
 
-        async function uploadToCloud() {
-            if (!isCloudSynced) return; // 没加载过云端，禁止上传，防止覆盖
-            
+        // 2. 云端备份函数 (静默进行)
+        async function pushToCloud() {
             document.getElementById('syncStatus').style.color = '#007aff';
             try {
-                await fetch(`https://kvdb.io/AnV9v7B7v6G4h6e7Wv1v6z/${bucketId}`, {
+                const res = await fetch(API_PREFIX + bucketId, {
                     method: 'POST',
                     body: JSON.stringify(db)
                 });
-                document.getElementById('syncStatus').style.color = '#34c759';
+                if(res.ok) document.getElementById('syncStatus').style.color = '#34c759';
             } catch (e) {
                 document.getElementById('syncStatus').style.color = '#ff3b30';
             }
         }
 
-        // --- 界面交互逻辑 ---
-        function addItem() {
-            if (!isCloudSynced) return alert("请先点击刷新图标确认云端同步状态");
-            const textEl = document.getElementById('textInput');
-            const typeEl = document.getElementById('typeInput');
-            if (!textEl.value.trim()) return;
-            
-            db.unshift({ id: Date.now(), type: typeEl.value || '默认', content: textEl.value.trim() });
-            textEl.value = ''; textEl.style.height = '24px';
-            render();
-            uploadToCloud();
+        // 3. 强制从云端同步 (合并逻辑)
+        async function pullFromCloud() {
+            bucketId = syncInput.value.trim();
+            if(!bucketId) return;
+            document.getElementById('syncStatus').style.color = '#007aff';
+            try {
+                const res = await fetch(API_PREFIX + bucketId);
+                if (res.ok) {
+                    const cloudData = await res.json();
+                    if (Array.isArray(cloudData)) {
+                        // 提示用户是否覆盖本地
+                        if(db.length > 0 && !confirm("云端有数据，是否用云端内容覆盖本地？")) return;
+                        db = cloudData;
+                        saveLocal();
+                    }
+                }
+                document.getElementById('syncStatus').style.color = '#34c759';
+            } catch (e) {
+                document.getElementById('syncStatus').style.color = '#ff3b30';
+                alert("拉取失败，请检查网络");
+            }
         }
 
-        function handleSearch() { searchTerm = document.getElementById('searchInput').value.toLowerCase(); render(); }
+        // --- 业务操作 ---
+        function addItem() {
+            const textEl = document.getElementById('textInput');
+            if (!textEl.value.trim()) return;
+            db.unshift({ id: Date.now(), type: document.getElementById('typeInput').value || '默认', content: textEl.value.trim() });
+            textEl.value = ''; textEl.style.height = '24px';
+            saveLocal();
+            pushToCloud();
+        }
+
+        function deleteItem(id) {
+            if (confirm("删除这条碎片？")) {
+                db = db.filter(i => i.id !== id);
+                saveLocal();
+                pushToCloud();
+            }
+        }
+
+        function updateContent(id, text) {
+            const item = db.find(i => i.id === id);
+            if (item && item.content !== text) {
+                item.content = text;
+                saveLocal();
+                pushToCloud();
+            }
+        }
+
+        // --- UI 交互 ---
         function filterBy(type) {
             currentFilter = type;
             document.getElementById('typeInput').value = (type === '全部') ? '默认' : type;
             render();
         }
 
+        function handleSearch() { searchTerm = document.getElementById('searchInput').value.toLowerCase(); render(); }
+
         function showMenu(event, targetId) {
             event.stopPropagation();
-            editingTarget = targetId;
             const menu = document.getElementById('tagMenu');
             const allTags = [...new Set(db.map(item => item.type))];
-            let html = allTags.map(t => `<div class="menu-item" onclick="applyTag('${t}')">${t}</div>`).join('');
-            html += `<div class="menu-item" style="color:var(--accent);font-weight:bold" onclick="applyTag('NEW_PROMPT')">+ 新建分类</div>`;
-            menu.innerHTML = html;
+            menu.innerHTML = allTags.map(t => `<div class="menu-item" onclick="applyTag('${t}', '${targetId}')">${t}</div>`).join('') + `<div class="menu-item" style="color:var(--accent); font-weight:bold;" onclick="applyTag('NEW_PROMPT', '${targetId}')">+ 新建分类</div>`;
             menu.style.display = 'block';
             const rect = event.target.getBoundingClientRect();
             menu.style.bottom = (window.innerHeight - rect.top + 10) + 'px';
@@ -201,16 +189,13 @@
         }
 
         function hideMenu() { document.getElementById('tagMenu').style.display = 'none'; }
-        function applyTag(tag) {
-            let finalTag = tag === 'NEW_PROMPT' ? prompt("输入新名称:") : tag;
+        
+        function applyTag(tag, targetId) {
+            let finalTag = tag === 'NEW_PROMPT' ? prompt("新名称:") : tag;
             if (!finalTag) return hideMenu();
-            if (editingTarget === 'BOTTOM_INPUT') document.getElementById('typeInput').value = finalTag;
-            else { const item = db.find(i => i.id === editingTarget); if (item) { item.type = finalTag; render(); uploadToCloud(); } }
+            if (targetId === 'BOTTOM_INPUT') document.getElementById('typeInput').value = finalTag;
+            else { const item = db.find(i => i.id == targetId); if (item) { item.type = finalTag; saveLocal(); pushToCloud(); } }
             hideMenu();
-        }
-
-        function deleteItem(id) {
-            if (confirm("删除这条碎片？")) { db = db.filter(i => i.id !== id); render(); uploadToCloud(); }
         }
 
         function render() {
@@ -218,25 +203,25 @@
             const listEl = document.getElementById('list');
             const allTypes = ['全部', ...new Set(db.map(item => item.type))];
             tabsEl.innerHTML = allTypes.map(t => `<div class="tab ${currentFilter === t ? 'active' : ''}" onclick="filterBy('${t}')">${t}</div>`).join('');
-            
             let data = currentFilter === '全部' ? db : db.filter(i => i.type === currentFilter);
             if (searchTerm) data = data.filter(i => i.content.toLowerCase().includes(searchTerm) || i.type.toLowerCase().includes(searchTerm));
-            
             let html = ''; let lastDate = '';
             data.forEach(item => {
                 const d = new Date(item.id);
                 const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
                 if (dateStr !== lastDate) { html += `<div class="date-header">${dateStr}</div>`; lastDate = dateStr; }
                 html += `<div class="item">
-                    <div class="item-text" contenteditable="true" onblur="db.find(i=>i.id===${item.id}).content=this.innerText;uploadToCloud();">${item.content}</div>
+                    <div class="item-text" contenteditable="true" onblur="updateContent(${item.id}, this.innerText)">${item.content}</div>
                     <div class="item-footer"><span class="type-tag" onclick="showMenu(event, ${item.id})"># ${item.type}</span><span class="btn-del" onclick="deleteItem(${item.id})">删除</span></div>
                 </div>`;
             });
-            listEl.innerHTML = html || '<div style="text-align:center;padding-top:60px;color:#999;">输入暗号并点🔄拉取数据</div>';
+            listEl.innerHTML = html || '<div style="text-align:center;padding-top:60px;color:#999;">暂无数据</div>';
         }
 
-        // 初始自动加载一次
-        loadFromCloud();
+        // 首次运行：先渲染本地内容，再静默拉取云端（可选）
+        render();
+        // 如果想一打开就拉取云端，可以取消下面这行的注释
+        // pullFromCloud();
     </script>
 </body>
 </html>
